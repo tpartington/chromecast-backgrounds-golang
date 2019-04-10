@@ -45,9 +45,10 @@ func main() {
 		panic(err)
 	}
 
-	re := regexp.MustCompile(`(https:\\\/\\\/lh3.googleusercontent.com\\\/)(([A-Za-z0-9_\\-])*)(\\u003d)(([A-Za-z0-9_\\-])*)(\\x22,)`)
+	re := regexp.MustCompile(`(https:\\\/\\\/lh)([0-9])(.googleusercontent.com\\\/)(proxy\\\/)(([A-Za-z0-9_\\-])*)(\\u003d)(([A-Za-z0-9_\\-])*)(\\x22,)`)
 
 	s := re.FindAllStringSubmatch(string(body), -1)
+	fmt.Printf("%d images found", len(s))
 
 	dir = string(append([]byte(dir), "/"...))
 
@@ -58,7 +59,7 @@ func main() {
 		url = unescape(url)
 		url = safeEncoding(url)
 
-		filename := []byte(match[2])
+		filename := []byte(match[5])
 		filename = unescape(filename)
 		filename = safeEncoding(filename)
 
@@ -114,6 +115,8 @@ func download(url string, filename string) error {
 		}
 
 		e = 0
+	} else {
+		fmt.Printf("Error downloading %s, %d", filename, resp.StatusCode)
 	}
 
 	return nil
