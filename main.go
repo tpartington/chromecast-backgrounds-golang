@@ -12,20 +12,28 @@ import (
 )
 
 var (
-	url string
-	dir string
-	e   = 1
+	url         string
+	dir         string
+	e           = 1
+	showVersion = false
+	version     = "dev"
 )
 
 func readFlags() {
 	flag.StringVar(&url, "url", "https://clients3.google.com/cast/chromecast/home", "the chromecast homepage")
 	flag.StringVar(&dir, "dir", "", "the directory to download the images to")
+	flag.BoolVar(&showVersion, "version", false, "show the version")
 	flag.Parse()
 }
 
 func main() {
 
 	readFlags()
+
+	if showVersion {
+		fmt.Printf("%s\n", version)
+		os.Exit(0)
+	}
 
 	if !checkForFile(dir) {
 		err := os.MkdirAll(dir, 0755)
@@ -48,7 +56,7 @@ func main() {
 	re := regexp.MustCompile(`(https:\\\/\\\/lh)([0-9])(.googleusercontent.com\\\/)(proxy\\\/)(([A-Za-z0-9_\\-])*)(\\u003d)(([A-Za-z0-9_\\-])*)(\\x22,)`)
 
 	s := re.FindAllStringSubmatch(string(body), -1)
-	fmt.Printf("%d images found", len(s))
+	fmt.Printf("%d images found\n", len(s))
 
 	dir = string(append([]byte(dir), "/"...))
 

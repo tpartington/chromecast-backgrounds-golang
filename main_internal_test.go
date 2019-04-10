@@ -36,7 +36,7 @@ func TestMain(t *testing.T) {
 	re := regexp.MustCompile(`(https:\\\/\\\/lh)([0-9])(.googleusercontent.com\\\/)(proxy\\\/)(([A-Za-z0-9_\\-])*)(\\u003d)(([A-Za-z0-9_\\-])*)(\\x22,)`)
 
 	s := re.FindAllStringSubmatch(string(body), -1)
-	fmt.Printf("%d images found", len(s))
+	fmt.Printf("%d images found\n", len(s))
 	dir = string(append([]byte(dir), "/"...))
 
 	for _, match := range s {
